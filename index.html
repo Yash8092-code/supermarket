@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SuperMart SAS | Modern Buyer Dashboard & Automated Supermarket System</title>
+  <meta name="description" content="SuperMart SAS (Supermarket Automation Software) Buyer Dashboard. Browse products, manage cart, track orders, and generate instant supermarket bills." />
+  <!-- Google Fonts for High-End Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ==========================================
+         1. SIDEBAR NAVIGATION
+         ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo-wrap">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">SuperMart <span class="badge-sas">SAS</span></span>
+          <span class="brand-subtitle">Buyer Portal • Automated</span>
+        </div>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close Sidebar">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="sidebar-menu-wrapper">
+        <p class="menu-label">MAIN NAVIGATION</p>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="#dashboard" class="nav-link active" data-view="dashboard" id="nav-dashboard">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span class="nav-text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#products" class="nav-link" data-view="products" id="nav-products">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <span class="nav-text">Browse Products</span>
+              <span class="nav-badge count-products" id="navProductCountBadge">18</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#cart" class="nav-link" data-view="cart" id="nav-cart">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              <span class="nav-text">Shopping Cart</span>
+              <span class="nav-badge count-cart" id="navCartCountBadge">0</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#orders" class="nav-link" data-view="orders" id="nav-orders">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              <span class="nav-text">My Orders</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#transactions" class="nav-link" data-view="transactions" id="nav-transactions">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span class="nav-text">Bills & Transactions</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#profile" class="nav-link" data-view="profile" id="nav-profile">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span class="nav-text">Profile</span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="menu-label mt-space">PREFERENCES & HELP</p>
+        <ul class="nav-list">
+          <li class="nav-item">
+            <button class="nav-link nav-btn" id="btnOpenSettings">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span class="nav-text">Settings</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link nav-btn" id="btnOpenHelp">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span class="nav-text">Help & Support</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link nav-btn logout-link" id="btnLogout">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              <span class="nav-text">Simulate Logout</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Quick Supermarket Status -->
+      <div class="sidebar-footer-card">
+        <div class="store-status">
+          <span class="status-pulse"></span>
+          <span class="store-status-text">Store Outlet: <strong>Kolkata Central</strong></span>
+        </div>
+        <p class="store-subtext">Express Checkout Active • 5% GST Mode</p>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- ==========================================
+           2. TOP NAVIGATION BAR
+           ========================================== -->
+      <header class="top-navbar">
+        <div class="navbar-left">
+          <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle Navigation Menu">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="page-title-wrap">
+            <span class="page-breadcrumb">SuperMart SAS / <span id="currentViewBreadcrumb">Dashboard</span></span>
+            <h1 class="page-title" id="pageHeadingTitle">Buyer Dashboard</h1>
+          </div>
+        </div>
+
+        <div class="navbar-right">
+          <!-- Global Search Input -->
+          <div class="global-search-container">
+            <div class="search-input-box">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="topSearchInput" placeholder="Search products, brands, or groceries..." autocomplete="off" />
+              <button class="clear-search-btn" id="clearSearchBtn" aria-label="Clear Search">&times;</button>
+            </div>
+            <!-- Live Search Autocomplete Popover -->
+            <div class="search-autocomplete-dropdown" id="searchDropdown"></div>
+          </div>
+
+          <!-- Notification Bell -->
+          <div class="header-action-wrap">
+            <button class="icon-circle-btn" id="notificationBtn" aria-label="Notifications" title="System Notifications">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span class="notification-indicator"></span>
+            </button>
+            <!-- Notification Popover -->
+            <div class="notification-popover" id="notificationPopover">
+              <div class="popover-header">
+                <h3>Notifications</h3>
+                <span class="badge-mini">3 New</span>
+              </div>
+              <ul class="notification-list">
+                <li class="notification-item unread">
+                  <div class="notif-icon bg-green">🏷️</div>
+                  <div class="notif-content">
+                    <p class="notif-title">Special Grocery Offer!</p>
+                    <p class="notif-msg">Use coupon <strong>SUPER10</strong> for flat 10% off on Basmati Rice and Dairy items.</p>
+                    <span class="notif-time">Just now</span>
+                  </div>
+                </li>
+                <li class="notification-item">
+                  <div class="notif-icon bg-blue">🛒</div>
+                  <div class="notif-content">
+                    <p class="notif-title">Express Self-Checkout</p>
+                    <p class="notif-msg">Add items to your cart, proceed to checkout, and print your thermal bill immediately.</p>
+                    <span class="notif-time">10 mins ago</span>
+                  </div>
+                </li>
+                <li class="notification-item">
+                  <div class="notif-icon bg-amber">⚡</div>
+                  <div class="notif-content">
+                    <p class="notif-title">Inventory Restocked</p>
+                    <p class="notif-msg">Fresh stock of Amul Milk, Britannia Bread, and Fortune Sunflower Oil is ready.</p>
+                    <span class="notif-time">1 hour ago</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Header Cart Button -->
+          <button class="cart-header-btn" id="topCartBtn" aria-label="View Shopping Cart" title="View Cart">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="cart-header-badge" id="topCartBadge">0</span>
+          </button>
+
+          <!-- User Profile Chip -->
+          <div class="user-profile-chip" id="topProfileChip" title="Click to view Buyer Profile">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Yash Kumar Avatar" class="user-avatar" id="topUserAvatar" />
+            <div class="user-meta">
+              <span class="user-name" id="topUserName">Yash Kumar</span>
+              <span class="user-role-badge">Buyer</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Container (Dynamic Views) -->
+      <main class="main-content" id="mainContent">
+
+        <!-- ==========================================
+             3. DASHBOARD OVERVIEW SECTION
+             ========================================== -->
+        <section class="dashboard-view view-section active" id="view-dashboard">
+          <!-- Welcome Hero Banner -->
+          <div class="welcome-hero-card">
+            <div class="hero-content">
+              <div class="hero-badge">Supermarket Automation Software • SE Lab Demonstration</div>
+              <h2 class="hero-title">Welcome back, <span id="welcomeUserName">Yash</span>! 👋</h2>
+              <p class="hero-subtitle">Browse fresh supermarket products, manage your personal shopping cart, apply discounts, and generate official automated store invoices in seconds.</p>
+              <div class="hero-actions">
+                <button class="btn btn-primary" onclick="window.app.navigate('products')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                  Browse Catalogue
+                </button>
+                <button class="btn btn-secondary-light" onclick="window.app.navigate('cart')">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                  Go to Shopping Cart (<span id="heroCartCount">0</span>)
+                </button>
+              </div>
+            </div>
+            <div class="hero-illustration">
+              <div class="promo-box">
+                <div class="promo-tag">LIMITED SPECIAL</div>
+                <div class="promo-code-display">Code: <span>SUPER10</span></div>
+                <p class="promo-text">Get 10% instant discount on grocery checkout today!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary Statistic Cards -->
+          <div class="stats-grid">
+            <!-- Card 1: Cart Items -->
+            <div class="stat-card" onclick="window.app.navigate('cart')">
+              <div class="stat-icon-wrap bg-green-light text-green">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Cart Items</span>
+                <h3 class="stat-value" id="statCartItems">0</h3>
+                <p class="stat-desc">Items currently in cart</p>
+              </div>
+              <div class="stat-trend up">Live Active</div>
+            </div>
+
+            <!-- Card 2: Cart Total -->
+            <div class="stat-card" onclick="window.app.navigate('cart')">
+              <div class="stat-icon-wrap bg-emerald-light text-emerald">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Cart Total</span>
+                <h3 class="stat-value" id="statCartTotal">₹0.00</h3>
+                <p class="stat-desc">Current cart value (incl. GST)</p>
+              </div>
+              <div class="stat-trend neutral">Auto-Calculated</div>
+            </div>
+
+            <!-- Card 3: Total Orders -->
+            <div class="stat-card" onclick="window.app.navigate('orders')">
+              <div class="stat-icon-wrap bg-blue-light text-blue">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Total Orders</span>
+                <h3 class="stat-value" id="statTotalOrders">5</h3>
+                <p class="stat-desc">Completed purchases</p>
+              </div>
+              <div class="stat-trend up">100% Delivered</div>
+            </div>
+
+            <!-- Card 4: Saved Items / Wishlist -->
+            <div class="stat-card" onclick="window.app.showWishlistFilter()">
+              <div class="stat-icon-wrap bg-rose-light text-rose">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </div>
+              <div class="stat-info">
+                <span class="stat-label">Saved Items</span>
+                <h3 class="stat-value" id="statSavedItems">8</h3>
+                <p class="stat-desc">Wishlist items</p>
+              </div>
+              <div class="stat-trend up">Favorited</div>
+            </div>
+          </div>
+
+          <!-- Popular Products Showcase Section -->
+          <div class="dashboard-section-block">
+            <div class="section-heading-row">
+              <div>
+                <h3 class="section-title">🔥 Popular Supermarket Essentials</h3>
+                <p class="section-subtitle">Frequently bought household and grocery items ready for immediate dispatch.</p>
+              </div>
+              <button class="btn-text-link" onclick="window.app.navigate('products')">
+                View Full Catalogue &rarr;
+              </button>
+            </div>
+            <div class="product-cards-grid" id="dashboardPopularProductsGrid">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Recently Purchased & Recent Activity Grid -->
+          <div class="dashboard-dual-grid">
+            <!-- Left: Recent Purchases -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <h4 class="card-title">📦 Recently Purchased</h4>
+                <button class="btn-text-link" onclick="window.app.navigate('orders')">All Orders</button>
+              </div>
+              <div class="recent-orders-mini" id="dashboardRecentOrdersMini">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+
+            <!-- Right: Supermarket Store Info & Buyer Perks -->
+            <div class="dashboard-card">
+              <div class="card-header-flex">
+                <h4 class="card-title">✨ SuperMart SAS Automated Features</h4>
+                <span class="tag-badge green">v2.4 Active</span>
+              </div>
+              <ul class="perks-list">
+                <li>
+                  <div class="perk-icon">⚡</div>
+                  <div>
+                    <strong>Automated Bill Generation:</strong>
+                    <p>Instant itemized receipt with store GST, HSN breakdown, barcode, and thermal print formatting.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="perk-icon">🛒</div>
+                  <div>
+                    <strong>Real-time Cart Recalculation:</strong>
+                    <p>Adjust item quantities on the fly with live 5% GST computation and promo validation.</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="perk-icon">📦</div>
+                  <div>
+                    <strong>Inventory Tracking:</strong>
+                    <p>Smart low-stock alerts, out-of-stock guards, and multi-category browsing.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             4. BROWSE PRODUCTS SECTION
+             ========================================== -->
+        <section class="products-view view-section" id="view-products">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Browse Supermarket Catalogue</h2>
+              <p class="view-subtitle">Select groceries, fresh produce, beverages, and daily necessities with transparent pricing.</p>
+            </div>
+            <div class="catalog-status-tag">
+              <span class="pulse-dot"></span> Showing <strong id="catalogVisibleCount">18</strong> Products
+            </div>
+          </div>
+
+          <!-- Category Navigation Tabs -->
+          <div class="category-tabs-container">
+            <div class="category-tabs" id="categoryTabs">
+              <button class="category-tab active" data-category="all">
+                <span class="cat-icon">🏬</span> All Products
+              </button>
+              <button class="category-tab" data-category="Fruits & Vegetables">
+                <span class="cat-icon">🍎</span> Fruits & Vegetables
+              </button>
+              <button class="category-tab" data-category="Dairy & Bakery">
+                <span class="cat-icon">🥛</span> Dairy & Bakery
+              </button>
+              <button class="category-tab" data-category="Beverages">
+                <span class="cat-icon">🥤</span> Beverages
+              </button>
+              <button class="category-tab" data-category="Snacks">
+                <span class="cat-icon">🍿</span> Snacks
+              </button>
+              <button class="category-tab" data-category="Groceries">
+                <span class="cat-icon">🌾</span> Groceries
+              </button>
+              <button class="category-tab" data-category="Personal Care">
+                <span class="cat-icon">🧼</span> Personal Care
+              </button>
+              <button class="category-tab" data-category="Household Items">
+                <span class="cat-icon">🧹</span> Household Items
+              </button>
+            </div>
+          </div>
+
+          <!-- Search, Sorting & Filter Controls Toolbar -->
+          <div class="filter-toolbar">
+            <div class="filter-left">
+              <div class="input-with-icon">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="catalogSearchInput" placeholder="Filter by product name, brand or keywords..." />
+              </div>
+
+              <div class="select-wrapper">
+                <label for="sortSelector" class="sr-only">Sort by</label>
+                <select id="sortSelector" class="form-select">
+                  <option value="popular">Sort: Popularity</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="name-asc">Name: A to Z</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="filter-right">
+              <label class="checkbox-toggle-label">
+                <input type="checkbox" id="inStockOnlyCheckbox" />
+                <span class="toggle-custom"></span>
+                <span>In-Stock Only</span>
+              </label>
+
+              <button class="btn btn-outline-sm" id="btnShowWishlistOnly">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                <span id="wishlistFilterText">Saved Items</span>
+              </button>
+
+              <button class="btn btn-ghost-sm" id="btnResetFilters" title="Reset all filters">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Catalogue Grid -->
+          <div class="product-cards-grid" id="catalogProductsGrid">
+            <!-- Dynamically populated via JS -->
+          </div>
+
+          <!-- Empty Catalog Search State -->
+          <div class="empty-state-box hidden" id="emptyCatalogState">
+            <div class="empty-icon-wrap">🔍</div>
+            <h3>No products found</h3>
+            <p>We couldn't find any supermarket items matching your selected filters or search terms.</p>
+            <button class="btn btn-primary" onclick="window.app.resetFilters()">Clear Filters</button>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             5. SHOPPING CART SECTION
+             ========================================== -->
+        <section class="cart-view view-section" id="view-cart">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Shopping Cart</h2>
+              <p class="view-subtitle">Review your selected items, adjust quantities, apply promotional discounts, and proceed to bill generation.</p>
+            </div>
+            <div class="cart-header-actions">
+              <button class="btn btn-outline-danger" id="btnClearCartBtn" title="Empty all items from cart">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear Cart
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Cart Layout Grid -->
+          <div class="cart-layout-container" id="cartLayoutContainer">
+            <!-- Left Side: Items Table/List -->
+            <div class="cart-items-panel">
+              <div class="cart-table-wrapper">
+                <table class="cart-table" id="cartTable">
+                  <thead>
+                    <tr>
+                      <th class="th-product">Product Details</th>
+                      <th class="th-price">Unit Price</th>
+                      <th class="th-qty">Quantity</th>
+                      <th class="th-total">Total Price</th>
+                      <th class="th-action">Remove</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cartTableBody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="cart-table-footer">
+                <button class="btn btn-secondary-outline" onclick="window.app.navigate('products')">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                  Continue Shopping
+                </button>
+                <span class="cart-items-tally" id="cartItemsTally">0 items in your basket</span>
+              </div>
+            </div>
+
+            <!-- Right Side: Cart Summary & Financial Calculation Card -->
+            <div class="cart-summary-panel">
+              <div class="summary-card">
+                <h3 class="summary-card-title">Order Summary</h3>
+
+                <!-- Coupon Code Section -->
+                <div class="coupon-box">
+                  <label for="couponInput" class="coupon-label">Promotional Voucher</label>
+                  <div class="coupon-input-wrap">
+                    <input type="text" id="couponInput" placeholder="Enter coupon (e.g. SUPER10)" />
+                    <button class="btn btn-dark-sm" id="btnApplyCoupon">Apply</button>
+                  </div>
+                  <div class="applied-coupon-pill hidden" id="appliedCouponPill">
+                    <span id="couponText">SUPER10 (10% OFF)</span>
+                    <button id="btnRemoveCoupon" aria-label="Remove coupon">&times;</button>
+                  </div>
+                </div>
+
+                <div class="summary-breakdown">
+                  <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value" id="summarySubtotal">₹0.00</span>
+                  </div>
+                  <div class="summary-row">
+                    <span class="summary-label">
+                      Estimated Tax (GST 5%)
+                      <span class="tooltip-badge" title="5% Goods and Services Tax standard for retail groceries">ℹ️</span>
+                    </span>
+                    <span class="summary-value" id="summaryGst">₹0.00</span>
+                  </div>
+                  <div class="summary-row discount-row hidden" id="summaryDiscountRow">
+                    <span class="summary-label">Discount Applied</span>
+                    <span class="summary-value text-green" id="summaryDiscount">-₹0.00</span>
+                  </div>
+                  <div class="summary-row delivery-row">
+                    <span class="summary-label">Store Carry Bag / Fee</span>
+                    <span class="summary-value text-green">FREE</span>
+                  </div>
+                  <div class="summary-divider"></div>
+                  <div class="summary-row grand-total-row">
+                    <span class="total-label">Grand Total</span>
+                    <span class="total-amount" id="summaryGrandTotal">₹0.00</span>
+                  </div>
+                  <p class="summary-tax-note">Inclusive of all automated supermarket taxes & duties.</p>
+                </div>
+
+                <button class="btn btn-primary btn-block btn-lg" id="btnProceedToCheckout">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                  Proceed to Checkout
+                </button>
+
+                <div class="safe-checkout-badge">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  <span>Instant Supermarket POS Bill Generation</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty Cart State -->
+          <div class="empty-state-box hidden" id="emptyCartState">
+            <div class="empty-cart-graphic">
+              <svg viewBox="0 0 24 24" width="70" height="70" fill="none" stroke="#9CA3AF" stroke-width="1.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            </div>
+            <h3>Your Shopping Cart is Empty</h3>
+            <p>You have not added any groceries or supermarket items to your cart yet.</p>
+            <button class="btn btn-primary" onclick="window.app.navigate('products')">
+              Explore Supermarket Products
+            </button>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             6. CHECKOUT & BILL GENERATION SECTION
+             ========================================== -->
+        <section class="checkout-view view-section" id="view-checkout">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Automated Checkout & Bill Generation</h2>
+              <p class="view-subtitle">Confirm customer details, pick simulated payment mode, and generate an official SuperMart SAS invoice.</p>
+            </div>
+            <button class="btn btn-secondary-outline" onclick="window.app.navigate('cart')">
+              &larr; Back to Cart
+            </button>
+          </div>
+
+          <div class="checkout-grid">
+            <!-- Left: Checkout Information Form -->
+            <div class="checkout-form-card">
+              <h3 class="form-section-heading">1. Customer Identification</h3>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="checkoutBuyerName">Buyer Full Name</label>
+                  <input type="text" id="checkoutBuyerName" class="form-control" value="Yash Kumar" required />
+                </div>
+                <div class="form-group">
+                  <label for="checkoutMobile">Mobile Contact Number</label>
+                  <input type="tel" id="checkoutMobile" class="form-control" value="+91 98765 43210" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="checkoutAddress">Billing / Delivery Address (Optional)</label>
+                <textarea id="checkoutAddress" class="form-control" rows="2">Flat 4B, Green Meadows Residency, Salt Lake Sector V, Kolkata - 700091</textarea>
+              </div>
+
+              <h3 class="form-section-heading mt-space">2. Payment Method (Simulated POS)</h3>
+              <div class="payment-methods-grid">
+                <label class="payment-radio-card active" for="payCash">
+                  <input type="radio" name="paymentMethod" id="payCash" value="Cash" checked />
+                  <div class="payment-card-content">
+                    <span class="pay-icon">💵</span>
+                    <strong>Cash on Counter</strong>
+                    <span class="pay-hint">Pay directly at supermarket POS</span>
+                  </div>
+                </label>
+
+                <label class="payment-radio-card" for="payUPI">
+                  <input type="radio" name="paymentMethod" id="payUPI" value="UPI" />
+                  <div class="payment-card-content">
+                    <span class="pay-icon">📱</span>
+                    <strong>UPI / QR Code</strong>
+                    <span class="pay-hint">Google Pay, PhonePe, Paytm</span>
+                  </div>
+                </label>
+
+                <label class="payment-radio-card" for="payCard">
+                  <input type="radio" name="paymentMethod" id="payCard" value="Credit/Debit Card" />
+                  <div class="payment-card-content">
+                    <span class="pay-icon">💳</span>
+                    <strong>Debit / Credit Card</strong>
+                    <span class="pay-hint">Visa, MasterCard, RuPay</span>
+                  </div>
+                </label>
+              </div>
+
+              <div class="form-actions mt-space">
+                <button class="btn btn-primary btn-lg btn-block" id="btnGenerateBill">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  Generate Official Supermarket Bill
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Order Preview Summary -->
+            <div class="checkout-summary-card">
+              <h3 class="summary-card-title">Order Items Preview</h3>
+              <div class="checkout-items-mini-list" id="checkoutItemsMiniList">
+                <!-- Populated via JS -->
+              </div>
+
+              <div class="summary-breakdown mini-breakdown">
+                <div class="summary-row">
+                  <span>Items Subtotal</span>
+                  <span id="checkoutSubtotal">₹0.00</span>
+                </div>
+                <div class="summary-row">
+                  <span>GST (5%)</span>
+                  <span id="checkoutGst">₹0.00</span>
+                </div>
+                <div class="summary-row discount-row hidden" id="checkoutDiscountRow">
+                  <span>Promo Discount</span>
+                  <span class="text-green" id="checkoutDiscount">-₹0.00</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-row grand-total-row">
+                  <span>Payable Total</span>
+                  <span class="total-amount" id="checkoutGrandTotal">₹0.00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             7. MY ORDERS SECTION
+             ========================================== -->
+        <section class="orders-view view-section" id="view-orders">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Order History</h2>
+              <p class="view-subtitle">Track your past purchases, view order details, and re-download official supermarket receipts.</p>
+            </div>
+            <div class="order-counter-badge">
+              Total Purchases: <strong id="ordersCountBadge">5</strong>
+            </div>
+          </div>
+
+          <!-- Orders Table Container -->
+          <div class="card-table-box">
+            <div class="table-responsive">
+              <table class="data-table" id="ordersTable">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Date & Time</th>
+                    <th>Items</th>
+                    <th>Total Amount</th>
+                    <th>Payment Method</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             8. BILLS & TRANSACTIONS SECTION
+             ========================================== -->
+        <section class="transactions-view view-section" id="view-transactions">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Bills & Transactions</h2>
+              <p class="view-subtitle">Financial audit trail of all generated supermarket bills, HSN tax breakdowns, and payment records.</p>
+            </div>
+          </div>
+
+          <div class="transactions-toolbar">
+            <div class="search-input-box sm-search">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="transactionsSearchInput" placeholder="Filter by invoice # or payment..." />
+            </div>
+            <div class="trans-metric">
+              <span>Lifetime Spend:</span>
+              <strong id="lifetimeSpendAmount">₹1,842.00</strong>
+            </div>
+          </div>
+
+          <div class="card-table-box">
+            <div class="table-responsive">
+              <table class="data-table" id="transactionsTable">
+                <thead>
+                  <tr>
+                    <th>Invoice #</th>
+                    <th>Transaction Date</th>
+                    <th>Amount Paid</th>
+                    <th>Payment Mode</th>
+                    <th>Status</th>
+                    <th>Receipt</th>
+                  </tr>
+                </thead>
+                <tbody id="transactionsTableBody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================
+             9. USER PROFILE SECTION
+             ========================================== -->
+        <section class="profile-view view-section" id="view-profile">
+          <div class="page-intro-header">
+            <div>
+              <h2 class="view-title">Buyer Profile & Settings</h2>
+              <p class="view-subtitle">Manage your personal account details, shipping addresses, and security preferences.</p>
+            </div>
+          </div>
+
+          <div class="profile-layout-grid">
+            <!-- Profile Card -->
+            <div class="profile-sidebar-card">
+              <div class="profile-avatar-block">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Yash Kumar Avatar" class="profile-avatar-large" id="profileLargeAvatar" />
+                <button class="btn-avatar-edit" id="btnChangeAvatar" title="Change Avatar (Demo)">📷</button>
+              </div>
+              <h3 class="profile-user-name" id="profileCardName">Yash Kumar</h3>
+              <div class="profile-badge-pill">
+                <span class="buyer-dot"></span> Authorized Buyer
+              </div>
+              <p class="profile-user-email" id="profileCardEmail">yash@example.com</p>
+
+              <div class="profile-stats-row">
+                <div class="p-stat">
+                  <strong id="profileStatOrders">5</strong>
+                  <span>Orders</span>
+                </div>
+                <div class="p-stat">
+                  <strong id="profileStatSaved">8</strong>
+                  <span>Wishlist</span>
+                </div>
+                <div class="p-stat">
+                  <strong id="profileStatSpent">₹1.8k</strong>
+                  <span>Spend</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Edit Form -->
+            <div class="profile-form-card">
+              <div class="card-header-flex">
+                <h3 class="card-title">Personal Information</h3>
+                <span class="text-muted text-xs">Role: Buyer (ID: BYR-8842)</span>
+              </div>
+
+              <form id="profileEditForm" onsubmit="event.preventDefault(); window.app.saveProfile();">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label for="profileInputName">Full Name</label>
+                    <input type="text" id="profileInputName" class="form-control" value="Yash Kumar" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="profileInputEmail">Email Address</label>
+                    <input type="email" id="profileInputEmail" class="form-control" value="yash@example.com" required />
+                  </div>
+                </div>
+
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label for="profileInputPhone">Mobile Phone</label>
+                    <input type="tel" id="profileInputPhone" class="form-control" value="+91 98765 43210" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="profileInputCity">City / State</label>
+                    <input type="text" id="profileInputCity" class="form-control" value="Kolkata, West Bengal" required />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="profileInputAddress">Preferred Delivery / Billing Address</label>
+                  <textarea id="profileInputAddress" class="form-control" rows="2">Flat 4B, Green Meadows Residency, Salt Lake Sector V, Kolkata - 700091</textarea>
+                </div>
+
+                <div class="profile-actions-row">
+                  <button type="submit" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                    Save Changes
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary" id="btnChangePassword">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Change Password (UI)
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 1: SUPERMARKET THERMAL RECEIPT / BILL
+       ========================================== -->
+  <div class="modal-overlay" id="receiptModalOverlay">
+    <div class="modal-dialog receipt-dialog">
+      <div class="modal-header-actions no-print">
+        <button class="btn btn-primary btn-sm" id="btnPrintReceiptBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Print Bill (POS)
+        </button>
+        <button class="btn btn-secondary-light btn-sm" id="btnDownloadReceiptBtn">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Download Slip
+        </button>
+        <button class="btn-close-modal" id="btnCloseReceiptModal" aria-label="Close Receipt Modal">&times;</button>
+      </div>
+
+      <!-- Printable Thermal Supermarket Receipt Layout -->
+      <div class="thermal-receipt" id="printableThermalReceipt">
+        <div class="receipt-header">
+          <div class="receipt-logo">
+            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#16A34A" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+          </div>
+          <h2 class="receipt-store-title">SUPERMART SAS</h2>
+          <p class="receipt-store-sub">Supermarket Automation Software • Retail POS</p>
+          <p class="receipt-address">Salt Lake Sector V, Kolkata, West Bengal - 700091</p>
+          <p class="receipt-tax-id">GSTIN: <strong>19AAACS2026M1Z8</strong> | FSSAI: 12822019000412</p>
+          <div class="receipt-dashed-divider"></div>
+        </div>
+
+        <div class="receipt-meta-grid">
+          <div>
+            <span class="meta-title">INVOICE NO:</span>
+            <strong id="receiptInvoiceNo">SMS-INV-2026-9041</strong>
+          </div>
+          <div>
+            <span class="meta-title">DATE & TIME:</span>
+            <span id="receiptDateTime">15-Sep-2026 20:15:30</span>
+          </div>
+          <div>
+            <span class="meta-title">CUSTOMER:</span>
+            <span id="receiptCustomerName">Yash Kumar</span>
+          </div>
+          <div>
+            <span class="meta-title">PAY METHOD:</span>
+            <span id="receiptPayMethod">Cash POS</span>
+          </div>
+        </div>
+
+        <div class="receipt-dashed-divider"></div>
+
+        <!-- Receipt Table -->
+        <table class="receipt-table">
+          <thead>
+            <tr>
+              <th class="text-left">ITEM</th>
+              <th class="text-center">QTY</th>
+              <th class="text-right">PRICE</th>
+              <th class="text-right">AMOUNT</th>
+            </tr>
+          </thead>
+          <tbody id="receiptTableBody">
+            <!-- Filled dynamically -->
+          </tbody>
+        </table>
+
+        <div class="receipt-dashed-divider"></div>
+
+        <!-- Receipt Calculations -->
+        <div class="receipt-totals-box">
+          <div class="r-row">
+            <span>SUBTOTAL:</span>
+            <span id="receiptSubtotal">₹0.00</span>
+          </div>
+          <div class="r-row">
+            <span>GST (5% CGST+SGST):</span>
+            <span id="receiptGst">₹0.00</span>
+          </div>
+          <div class="r-row discount-row hidden" id="receiptDiscountRow">
+            <span>DISCOUNT:</span>
+            <span id="receiptDiscount">-₹0.00</span>
+          </div>
+          <div class="receipt-double-divider"></div>
+          <div class="r-row grand-total">
+            <span>TOTAL PAYABLE:</span>
+            <span id="receiptGrandTotal">₹0.00</span>
+          </div>
+          <div class="receipt-double-divider"></div>
+        </div>
+
+        <!-- Simulated Barcode & Footer -->
+        <div class="receipt-barcode-wrap">
+          <div class="barcode-lines">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <span class="barcode-number" id="receiptBarcodeNumber">*SMS-2026-9041-BYR*</span>
+        </div>
+
+        <div class="receipt-footer">
+          <p>*** THANK YOU FOR SHOPPING AT SUPERMART! ***</p>
+          <p>Goods once sold are covered by our 7-day return policy.</p>
+          <p class="receipt-watermark">SUPERMARKET AUTOMATION SYSTEM • LAB PROJECT</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: PRODUCT QUICK VIEW MODAL
+       ========================================== -->
+  <div class="modal-overlay" id="productModalOverlay">
+    <div class="modal-dialog product-quick-dialog">
+      <button class="btn-close-modal" id="btnCloseProductModal">&times;</button>
+      <div class="quick-view-grid" id="quickViewContent">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 3: SETTINGS MODAL
+       ========================================== -->
+  <div class="modal-overlay" id="settingsModalOverlay">
+    <div class="modal-dialog simple-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">SuperMart SAS Settings</h3>
+        <button class="btn-close-modal" id="btnCloseSettingsModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <div>
+            <strong>Instant Toast Alerts</strong>
+            <p class="text-xs text-muted">Show dynamic confirmation popups for cart actions</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked id="prefToastToggle" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <div>
+            <strong>Auto-apply Promotional Discounts</strong>
+            <p class="text-xs text-muted">Automatically test valid discount codes at checkout</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked id="prefAutoPromo" />
+            <span class="slider round"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <div>
+            <strong>Reset Local Storage Data</strong>
+            <p class="text-xs text-muted">Restore default demo products, cart, and sample order history</p>
+          </div>
+          <button class="btn btn-outline-danger btn-sm" onclick="window.app.resetAllData()">Reset Data</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="window.app.closeModal('settingsModalOverlay')">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 4: HELP & SUPPORT MODAL
+       ========================================== -->
+  <div class="modal-overlay" id="helpModalOverlay">
+    <div class="modal-dialog simple-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Help & Supermarket Software Guide</h3>
+        <button class="btn-close-modal" id="btnCloseHelpModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="help-faq-item">
+          <strong>How do I generate an automated bill?</strong>
+          <p>Add desired products to your cart from the <em>Browse Products</em> section, click <em>Proceed to Checkout</em>, and press <em>Generate Official Supermarket Bill</em>. You can print or download the bill directly.</p>
+        </div>
+        <div class="help-faq-item">
+          <strong>What is the applicable tax rate?</strong>
+          <p>As per Indian supermarket retail guidelines for packed groceries, a standard 5% GST is dynamically calculated on the cart subtotal.</p>
+        </div>
+        <div class="help-faq-item">
+          <strong>Which promo code works for testing?</strong>
+          <p>You can use promo code <strong>SUPER10</strong> for a 10% discount on your order!</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="window.app.closeModal('helpModalOverlay')">Got It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       TOAST NOTIFICATION ENGINE
+       ========================================== -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
