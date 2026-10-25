@@ -110,6 +110,10 @@
           <span class="store-status-text">Store Outlet: <strong>Kolkata Central</strong></span>
         </div>
         <p class="store-subtext">Express Checkout Active • 5% GST Mode</p>
+        <div class="api-status-pill" id="apiStatusPill" title="Backend Server Connectivity Status">
+          <span class="api-dot" id="apiDot"></span>
+          <span id="apiStatusText">Checking Backend...</span>
+        </div>
       </div>
     </aside>
 
@@ -188,7 +192,7 @@
             <span class="cart-header-badge" id="topCartBadge">0</span>
           </button>
 
-          <!-- User Profile Chip -->
+          <!-- User Profile Chip (Shown when logged in) -->
           <div class="user-profile-chip" id="topProfileChip" title="Click to view Buyer Profile">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Yash Kumar Avatar" class="user-avatar" id="topUserAvatar" />
             <div class="user-meta">
@@ -196,6 +200,12 @@
               <span class="user-role-badge">Buyer</span>
             </div>
           </div>
+
+          <!-- Sign In Button (Shown when guest/unauthenticated) -->
+          <button class="btn btn-primary btn-sm hidden" id="topSignInBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+            Sign In / Register
+          </button>
         </div>
       </header>
 
@@ -1029,6 +1039,95 @@
       <div class="modal-footer">
         <button class="btn btn-primary" onclick="window.app.closeModal('helpModalOverlay')">Got It</button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 5: BUYER AUTHENTICATION MODAL (LOGIN / REGISTER)
+       ========================================== -->
+  <div class="modal-overlay" id="authModalOverlay">
+    <div class="modal-dialog auth-dialog">
+      <button class="btn-close-modal" id="btnCloseAuthModal" aria-label="Close Auth Modal">&times;</button>
+      
+      <div class="auth-modal-header">
+        <div class="brand-logo-wrap sm-logo">
+          <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <h3 class="auth-modal-title" id="authModalTitle">Welcome to SuperMart SAS</h3>
+        <p class="auth-modal-sub" id="authModalSub">Sign in to your buyer portal to save orders and generate receipts</p>
+      </div>
+
+      <!-- Auth Tabs: Sign In / Create Account -->
+      <div class="auth-tab-row">
+        <button class="auth-tab active" id="tabBtnLogin" onclick="window.app.switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabBtnRegister" onclick="window.app.switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- Alert Message Box -->
+      <div class="auth-alert hidden" id="authAlertBox"></div>
+
+      <!-- Tab 1: Login Form -->
+      <form id="authLoginForm" onsubmit="event.preventDefault(); window.app.handleLoginSubmit();">
+        <div class="form-group">
+          <label for="loginEmail">Email Address</label>
+          <input type="email" id="loginEmail" class="form-control" placeholder="yash@example.com" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+        <div class="auth-demo-hint">
+          <span>Demo Credentials:</span> <strong>yash@example.com</strong> / <strong>Password123!</strong>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-space" id="btnLoginSubmit">
+          Sign In to Buyer Portal
+        </button>
+      </form>
+
+      <!-- Tab 2: Register Form -->
+      <form id="authRegisterForm" class="hidden" onsubmit="event.preventDefault(); window.app.handleRegisterSubmit();">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <input type="text" id="regName" class="form-control" placeholder="e.g. Yash Kumar" required />
+          </div>
+          <div class="form-group">
+            <label for="regPhone">Mobile Number</label>
+            <input type="tel" id="regPhone" class="form-control" placeholder="+91 9876543210" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regEmail">Email Address</label>
+          <input type="email" id="regEmail" class="form-control" placeholder="buyer@example.com" required autocomplete="email" />
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regPassword">Password (min 8 chars)</label>
+            <input type="password" id="regPassword" class="form-control" placeholder="At least 8 characters" minlength="8" required autocomplete="new-password" />
+          </div>
+          <div class="form-group">
+            <label for="regConfirmPassword">Confirm Password</label>
+            <input type="password" id="regConfirmPassword" class="form-control" placeholder="Repeat password" minlength="8" required autocomplete="new-password" />
+          </div>
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label for="regCity">City / State</label>
+            <input type="text" id="regCity" class="form-control" placeholder="Kolkata, West Bengal" value="Kolkata, West Bengal" />
+          </div>
+          <div class="form-group">
+            <label for="regAddress">Delivery Address</label>
+            <input type="text" id="regAddress" class="form-control" placeholder="Salt Lake Sector V" value="Salt Lake Sector V" />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg mt-space" id="btnRegisterSubmit">
+          Create Buyer Account
+        </button>
+      </form>
     </div>
   </div>
 
