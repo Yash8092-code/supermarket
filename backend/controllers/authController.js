@@ -38,19 +38,22 @@ const register = async (req, res, next) => {
 
     const token = generateToken(user._id);
 
+    const buyerPayload = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+      address: user.address,
+      role: user.role
+    };
+
     res.status(201).json({
       success: true,
       message: 'Buyer registration successful! Welcome to SuperMart SAS.',
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        address: user.address,
-        role: user.role
-      }
+      user: buyerPayload,
+      buyer: buyerPayload
     });
   } catch (error) {
     next(error);
@@ -88,19 +91,22 @@ const login = async (req, res, next) => {
 
     const token = generateToken(user._id);
 
+    const buyerPayload = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+      address: user.address,
+      role: user.role
+    };
+
     res.status(200).json({
       success: true,
       message: `Welcome back, ${user.name}!`,
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        address: user.address,
-        role: user.role
-      }
+      user: buyerPayload,
+      buyer: buyerPayload
     });
   } catch (error) {
     next(error);
@@ -123,17 +129,20 @@ const getMe = async (req, res, next) => {
       });
     }
 
+    const buyerPayload = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      city: user.city,
+      address: user.address,
+      role: user.role
+    };
+
     res.status(200).json({
       success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        city: user.city,
-        address: user.address,
-        role: user.role
-      }
+      user: buyerPayload,
+      buyer: buyerPayload
     });
   } catch (error) {
     next(error);

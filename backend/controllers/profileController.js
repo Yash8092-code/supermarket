@@ -18,7 +18,9 @@ const getProfile = async (req, res, next) => {
 
     res.status(200).json({
       success: true,
-      data: user
+      data: user,
+      buyer: user,
+      user: user
     });
   } catch (error) {
     next(error);
@@ -67,7 +69,9 @@ const updateProfile = async (req, res, next) => {
     res.status(200).json({
       success: true,
       message: 'Buyer profile updated successfully.',
-      data: updatedUser
+      data: updatedUser,
+      buyer: updatedUser,
+      user: updatedUser
     });
   } catch (error) {
     next(error);

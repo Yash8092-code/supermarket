@@ -130,8 +130,30 @@ const orderSchema = new mongoose.Schema(
     }
   },
   {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
+
+// Virtual field mappings for flexible consumption
+orderSchema.virtual('invoiceNumber').get(function () {
+  return this.invoiceNo;
+});
+
+orderSchema.virtual('orderStatus').get(function () {
+  return this.status;
+});
+
+orderItemSchema.virtual('productName').get(function () {
+  return this.name;
+});
+
+orderItemSchema.virtual('unitPrice').get(function () {
+  return this.price;
+});
+
+orderItemSchema.set('toJSON', { virtuals: true });
+orderItemSchema.set('toObject', { virtuals: true });
 
 module.exports = mongoose.model('Order', orderSchema);

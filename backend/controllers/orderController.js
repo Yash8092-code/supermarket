@@ -41,9 +41,10 @@ const createOrder = async (req, res, next) => {
       couponCode = ''
     } = req.body;
 
-    // Validate customer identification
-    const buyerName = (customerName || req.user.name || '').trim();
-    const mobile = (customerMobile || req.user.phone || '').trim();
+    // Validate customer identification with fallback to shippingAddress or req.user
+    const buyerName = (customerName || (req.body.shippingAddress && req.body.shippingAddress.fullName) || req.user.name || '').trim();
+    const mobile = (customerMobile || (req.body.shippingAddress && req.body.shippingAddress.phone) || req.user.phone || '').trim();
+    const address = (deliveryAddress || (req.body.shippingAddress && req.body.shippingAddress.addressLine) || req.user.address || '').trim();
 
     if (!buyerName) {
       return res.status(400).json({
@@ -88,7 +89,10 @@ const createOrder = async (req, res, next) => {
     const inventoryUpdates = [];
 
     for (const item of checkoutItems) {
-      const prodId = item.productId || (item.product && (item.product._id || item.product.id || item.product.sku)) || item.sku;
+      const prodId = item.productId ||
+        (typeof item.product === 'string' ? item.product : (item.product && (item.product._id || item.product.id || item.product.sku))) ||
+        item.sku ||
+        (typeof item === 'string' ? item : undefined);
       const requestedQty = parseInt(item.quantity, 10);
 
       if (isNaN(requestedQty) || requestedQty < 1) {
@@ -233,7 +237,8 @@ const getOrders = async (req, res, next) => {
       total,
       page,
       totalPages: Math.ceil(total / limit),
-      data: orders
+      data: orders,
+      orders: orders
     });
   } catch (error) {
     next(error);

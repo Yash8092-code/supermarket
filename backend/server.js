@@ -18,25 +18,38 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 
-// Security HTTP headers
-app.use(helmet());
+// Security HTTP headers with cross-origin resource policy enabled for API consumers
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    crossOriginOpenerPolicy: false
+  })
+);
 
 // Cross-Origin Resource Sharing (CORS) Configuration
-const allowedOrigins = process.env.CLIENT_ORIGIN
-  ? process.env.CLIENT_ORIGIN.split(',').map(origin => origin.trim())
-  : [
-      'https://yash8092-code.github.io',
-      'http://localhost:5500',
-      'http://127.0.0.1:5500',
-      'http://localhost:3000',
-      'http://127.0.0.1:3000'
-    ];
+const defaultOrigins = [
+  'https://yash8092-code.github.io',
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
+const envOrigins = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(',').map(o => o.trim())
+  : [];
+
+const allowedOrigins = Array.from(new Set([...defaultOrigins, ...envOrigins])).map(o => o.replace(/\/+$/, ''));
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, curl, postman, same-origin)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+    // Allow requests with no origin (like mobile apps, curl, postman, same-origin, file://)
+    if (!origin || origin === 'null') return callback(null, true);
+
+    const cleanOrigin = origin.replace(/\/+$/, '');
+    const isAllowed = allowedOrigins.includes(cleanOrigin) || process.env.NODE_ENV === 'development';
+
+    if (isAllowed) {
       callback(null, true);
     } else {
       callback(new Error(`CORS blocked for origin: ${origin}`));
@@ -48,8 +61,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true, limit: '1mb' }));
+app.options('*', cors(corsOptions));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {

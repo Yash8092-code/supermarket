@@ -1380,8 +1380,9 @@
     async loadRemoteProducts() {
       try {
         const res = await this.api.get('/products?limit=100');
-        if (res.ok && res.data && res.data.success && Array.isArray(res.data.products)) {
-          this.products = res.data.products.map(p => ({
+        const productList = res.data?.products || (Array.isArray(res.data?.data) ? res.data.data : null);
+        if (res.ok && res.data && res.data.success && Array.isArray(productList)) {
+          this.products = productList.map(p => ({
             id: p.sku || p._id || p.id,
             sku: p.sku || p.id,
             name: p.name,
@@ -1410,10 +1411,10 @@
       try {
         const res = await this.api.get('/profile');
         if (res.ok && res.data && res.data.success) {
-          this.currentUser = res.data.buyer;
+          this.currentUser = res.data.buyer || res.data.user || res.data.data || {};
           this.profile = {
-            name: this.currentUser.name,
-            email: this.currentUser.email,
+            name: this.currentUser.name || 'Buyer',
+            email: this.currentUser.email || 'buyer@example.com',
             phone: this.currentUser.phone || '+91 98765 43210',
             city: this.currentUser.city || 'Kolkata, West Bengal',
             address: this.currentUser.address || 'Salt Lake Sector V, Kolkata'
@@ -1442,11 +1443,11 @@
       try {
         const res = await this.api.get('/dashboard/stats');
         if (res.ok && res.data && res.data.success) {
-          const stats = res.data.stats;
-          if (this.dom.statTotalOrders) this.dom.statTotalOrders.textContent = stats.totalOrders;
-          if (this.dom.statSavedItems) this.dom.statSavedItems.textContent = stats.wishlistCount;
-          if (this.dom.profileStatOrders) this.dom.profileStatOrders.textContent = stats.totalOrders;
-          if (this.dom.profileStatSaved) this.dom.profileStatSaved.textContent = stats.wishlistCount;
+          const stats = res.data.stats || res.data.data?.stats || res.data.data || {};
+          if (this.dom.statTotalOrders) this.dom.statTotalOrders.textContent = stats.totalOrders ?? 0;
+          if (this.dom.statSavedItems) this.dom.statSavedItems.textContent = stats.wishlistCount ?? 0;
+          if (this.dom.profileStatOrders) this.dom.profileStatOrders.textContent = stats.totalOrders ?? 0;
+          if (this.dom.profileStatSaved) this.dom.profileStatSaved.textContent = stats.wishlistCount ?? 0;
           if (this.dom.profileStatSpent) {
             const spent = stats.lifetimeSpend || 0;
             this.dom.profileStatSpent.textContent = `₹${spent >= 1000 ? (spent / 1000).toFixed(1) + 'k' : spent.toFixed(0)}`;
@@ -1463,23 +1464,24 @@
     async loadRemoteOrders() {
       try {
         const res = await this.api.get('/orders');
-        if (res.ok && res.data && res.data.success && Array.isArray(res.data.orders)) {
-          this.orders = res.data.orders.map(o => ({
-            id: o.invoiceNumber || o.orderNumber || o._id,
-            date: new Date(o.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + new Date(o.createdAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-            itemCount: o.items.reduce((s, i) => s + i.quantity, 0),
-            items: o.items.map(i => ({
-              name: i.productName,
-              qty: i.quantity,
-              price: i.unitPrice,
-              total: i.lineTotal
+        const orderList = res.data?.orders || (Array.isArray(res.data?.data) ? res.data.data : null);
+        if (res.ok && res.data && res.data.success && Array.isArray(orderList)) {
+          this.orders = orderList.map(o => ({
+            id: o.invoiceNumber || o.invoiceNo || o.orderNumber || o._id,
+            date: new Date(o.createdAt || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + new Date(o.createdAt || Date.now()).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+            itemCount: (o.items || []).reduce((s, i) => s + (i.quantity || 0), 0),
+            items: (o.items || []).map(i => ({
+              name: i.productName || i.name || (i.product && i.product.name) || 'Product',
+              qty: i.quantity || 1,
+              price: i.unitPrice || i.price || 0,
+              total: i.lineTotal || ((i.unitPrice || i.price || 0) * (i.quantity || 1))
             })),
-            subtotal: o.subtotal,
-            gst: o.gst,
+            subtotal: o.subtotal || 0,
+            gst: o.gst || 0,
             discount: o.discount || 0,
-            grandTotal: o.grandTotal,
-            paymentMethod: o.paymentMethod,
-            status: o.orderStatus
+            grandTotal: o.grandTotal || 0,
+            paymentMethod: o.paymentMethod || 'Cash',
+            status: o.orderStatus || o.status || 'Completed'
           }));
           this.renderOrders();
           this.renderTransactions();
@@ -1493,8 +1495,9 @@
     async loadRemoteWishlist() {
       try {
         const res = await this.api.get('/wishlist');
-        if (res.ok && res.data && res.data.success && Array.isArray(res.data.items)) {
-          this.wishlist = res.data.items.map(i => i.product?.sku || i.product?.id || i.product?._id || i.product).filter(Boolean);
+        const wishlistItems = res.data?.items || (Array.isArray(res.data?.data) ? res.data.data : null);
+        if (res.ok && res.data && res.data.success && Array.isArray(wishlistItems)) {
+          this.wishlist = wishlistItems.map(i => i.product?.sku || i.product?.id || i.product?._id || i.sku || i.id || i).filter(Boolean);
           this.renderCatalog();
           this.updateBadgesAndStats();
         }
@@ -1574,10 +1577,10 @@
         if (res.ok && res.data && res.data.success) {
           this.token = res.data.token;
           this.api.setToken(this.token);
-          this.currentUser = res.data.buyer;
+          this.currentUser = res.data.buyer || res.data.user || {};
           this.profile = {
-            name: this.currentUser.name,
-            email: this.currentUser.email,
+            name: this.currentUser.name || email.split('@')[0],
+            email: this.currentUser.email || email,
             phone: this.currentUser.phone || '+91 98765 43210',
             city: this.currentUser.city || 'Kolkata, West Bengal',
             address: this.currentUser.address || 'Salt Lake Sector V, Kolkata'
@@ -1585,16 +1588,17 @@
           this.saveToStorage('sms_buyer_profile', this.profile);
           this.updateAuthUI(true);
           this.closeAuthModal();
-          this.showToast(`Welcome back, ${this.currentUser.name}!`, 'success');
+          this.showToast(`Welcome back, ${this.profile.name}!`, 'success');
 
           // Sync remote data
           await this.loadRemoteDashboardStats();
           await this.loadRemoteOrders();
           await this.loadRemoteWishlist();
         } else {
-          this.showAuthAlert(res.data.message || 'Login failed. Please verify credentials.', 'error');
+          this.showAuthAlert(res.data?.message || 'Login failed. Please verify credentials.', 'error');
         }
       } catch (err) {
+        console.error('[Login Error]', err);
         this.showAuthAlert('Unable to reach backend server. Please verify Express server is running on port 5000.', 'error');
       } finally {
         if (submitBtn) {
@@ -1648,18 +1652,18 @@
         if (res.ok && res.data && res.data.success) {
           this.token = res.data.token;
           this.api.setToken(this.token);
-          this.currentUser = res.data.buyer;
+          this.currentUser = res.data.buyer || res.data.user || {};
           this.profile = {
-            name: this.currentUser.name,
-            email: this.currentUser.email,
-            phone: this.currentUser.phone,
-            city: this.currentUser.city,
-            address: this.currentUser.address
+            name: this.currentUser.name || name,
+            email: this.currentUser.email || email,
+            phone: this.currentUser.phone || phone,
+            city: this.currentUser.city || city,
+            address: this.currentUser.address || address
           };
           this.saveToStorage('sms_buyer_profile', this.profile);
           this.updateAuthUI(true);
           this.closeAuthModal();
-          this.showToast(`Account created! Welcome to SuperMart, ${this.currentUser.name}.`, 'success');
+          this.showToast(`Account created! Welcome to SuperMart, ${this.profile.name}.`, 'success');
 
           // Initialize fresh dashboard
           this.orders = [];
@@ -1668,9 +1672,10 @@
           this.renderTransactions();
           this.updateBadgesAndStats();
         } else {
-          this.showAuthAlert(res.data.message || 'Registration failed.', 'error');
+          this.showAuthAlert(res.data?.message || 'Registration failed.', 'error');
         }
       } catch (err) {
+        console.error('[Register Error]', err);
         this.showAuthAlert('Error connecting to backend during registration.', 'error');
       } finally {
         if (submitBtn) {

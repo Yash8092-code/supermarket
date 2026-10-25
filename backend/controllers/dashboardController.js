@@ -48,25 +48,32 @@ const getDashboardStats = async (req, res, next) => {
       paymentMethod: o.paymentMethod
     }));
 
+    const statsPayload = {
+      totalOrders,
+      lifetimeSpend: Math.round(lifetimeSpend * 100) / 100,
+      wishlistCount,
+      cartItemCount,
+      cartGrandTotal
+    };
+
+    const buyerPayload = {
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role
+    };
+
     res.status(200).json({
       success: true,
       data: {
-        buyer: {
-          id: req.user._id,
-          name: req.user.name,
-          email: req.user.email,
-          role: req.user.role
-        },
-        stats: {
-          totalOrders,
-          lifetimeSpend: Math.round(lifetimeSpend * 100) / 100,
-          wishlistCount,
-          cartItemCount,
-          cartGrandTotal
-        },
+        buyer: buyerPayload,
+        stats: statsPayload,
         recentOrders,
         popularProducts
-      }
+      },
+      stats: statsPayload,
+      buyer: buyerPayload,
+      recentOrders
     });
   } catch (error) {
     next(error);

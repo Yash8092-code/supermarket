@@ -29,7 +29,8 @@ const getWishlist = async (req, res, next) => {
     res.status(200).json({
       success: true,
       count: wishlist.products.length,
-      data: wishlist.products
+      data: wishlist.products,
+      items: wishlist.products
     });
   } catch (error) {
     next(error);
@@ -74,7 +75,8 @@ const addToWishlist = async (req, res, next) => {
       success: true,
       message: `"${product.name}" added to saved items.`,
       count: updated.products.length,
-      data: updated.products
+      data: updated.products,
+      items: updated.products
     });
   } catch (error) {
     next(error);
@@ -112,7 +114,8 @@ const removeFromWishlist = async (req, res, next) => {
       success: true,
       message: 'Item removed from saved items.',
       count: updated.products.length,
-      data: updated.products
+      data: updated.products,
+      items: updated.products
     });
   } catch (error) {
     next(error);
