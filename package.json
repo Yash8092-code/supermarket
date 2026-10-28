@@ -1,0 +1,25 @@
+{
+  "name": "supermarket-sas",
+  "version": "2.5.0",
+  "description": "SuperMart SAS - Supermarket Automation Software Buyer Dashboard & Backend",
+  "main": "backend/server.js",
+  "scripts": {
+    "postinstall": "cd backend && npm install",
+    "seed": "cd backend && npm run seed",
+    "build": "cd backend && npm install && npm run seed",
+    "start": "node backend/server.js",
+    "test": "cd backend && npm test"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "supermarket",
+    "automation",
+    "express",
+    "mongodb",
+    "render"
+  ],
+  "author": "Yash Kumar",
+  "license": "MIT"
+}

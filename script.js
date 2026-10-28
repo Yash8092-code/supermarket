@@ -12,8 +12,25 @@
   /* ==========================================================================
      0. BACKEND API CLIENT & CONFIGURATION
      ========================================================================== */
+  const getAutoApiBaseUrl = () => {
+    if (typeof window !== 'undefined' && window.location) {
+      const origin = window.location.origin;
+      if (origin && !origin.includes('localhost') && !origin.includes('127.0.0.1')) {
+        // If served from Render full-stack service
+        if (!origin.includes('github.io')) {
+          return `${origin}/api`;
+        }
+        // If running from GitHub Pages, target deployed Render backend (with optional localStorage override)
+        const customUrl = localStorage.getItem('sms_custom_api_url');
+        if (customUrl) return customUrl;
+        return window.SUPERMART_RENDER_BACKEND || 'https://supermarket-sas.onrender.com/api';
+      }
+    }
+    return 'http://localhost:5000/api';
+  };
+
   window.SUPERMART_CONFIG = window.SUPERMART_CONFIG || {
-    API_BASE_URL: 'http://localhost:5000/api'
+    API_BASE_URL: getAutoApiBaseUrl()
   };
 
   class ApiClient {

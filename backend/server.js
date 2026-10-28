@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -18,11 +21,12 @@ const dashboardRoutes = require('./routes/dashboardRoutes');
 
 const app = express();
 
-// Security HTTP headers with cross-origin resource policy enabled for API consumers
+// Security HTTP headers
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: 'cross-origin' },
-    crossOriginOpenerPolicy: false
+    crossOriginOpenerPolicy: false,
+    contentSecurityPolicy: false // Allows CDN fonts and Unsplash product photography
   })
 );
 
@@ -47,7 +51,10 @@ const corsOptions = {
     if (!origin || origin === 'null') return callback(null, true);
 
     const cleanOrigin = origin.replace(/\/+$/, '');
-    const isAllowed = allowedOrigins.includes(cleanOrigin) || process.env.NODE_ENV === 'development';
+    const isAllowed =
+      allowedOrigins.includes(cleanOrigin) ||
+      cleanOrigin.endsWith('.onrender.com') ||
+      process.env.NODE_ENV === 'development';
 
     if (isAllowed) {
       callback(null, true);
@@ -98,8 +105,24 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Serve static frontend files (Buyer Dashboard, styling, assets)
+const frontendDir = path.resolve(__dirname, '..');
+app.use(express.static(frontendDir));
+
+// Fallback to index.html for non-API client routes (SPA-style navigation)
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  const indexPath = path.join(frontendDir, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    return res.sendFile(indexPath);
+  }
+  next();
+});
+
 // Catch-all 404 handler for undefined API routes
-app.use((req, res) => {
+app.use('/api/*', (req, res) => {
   res.status(404).json({
     success: false,
     message: `API endpoint not found: ${req.method} ${req.originalUrl}`,
